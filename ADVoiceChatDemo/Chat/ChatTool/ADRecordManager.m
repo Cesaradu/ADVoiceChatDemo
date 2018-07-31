@@ -39,16 +39,16 @@
 // here also need to limit recording time
 - (void)startRecordingWithFileName:(NSString *)fileName completion:(void(^)(NSError *error))completion {
     NSError *error = nil;
-    if (![[ADRecordManager shareManager] canRecord]) {
-        //        [MBProgressHUD showError:@"请在手机设置中打开录音权限" toView:[UIApplication sharedApplication].keyWindow];
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"无法录音" message:@"请在iPhone的“设置-隐私-麦克风”选项中，允许iCom访问你的手机麦克风。" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-        [alert show];
-        if (completion) {
-            error = [NSError errorWithDomain:NSLocalizedString(@"error", @"没权限") code:122 userInfo:nil];
-            completion(error);
-        }
-        return;
-    }
+//    if (![[ADRecordManager shareManager] canRecord]) {
+//        //        [MBProgressHUD showError:@"请在手机设置中打开录音权限" toView:[UIApplication sharedApplication].keyWindow];
+//        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"无法录音" message:@"请在iPhone的“设置-隐私-麦克风”选项中，允许iCom访问你的手机麦克风。" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+//        [alert show];
+//        if (completion) {
+//            error = [NSError errorWithDomain:NSLocalizedString(@"error", @"没权限") code:122 userInfo:nil];
+//            completion(error);
+//        }
+//        return;
+//    }
     if ([_recorder isRecording]) {
         [_recorder stop];
         [self cancelCurrentRecording];
@@ -58,14 +58,15 @@
         NSURL *wavUrl = [[NSURL alloc] initFileURLWithPath:wavFilePath];
         // 在实例化AVAudioRecorder之前，先开启会话,否则真机上录制失败
         AVAudioSession *session = [AVAudioSession sharedInstance];
-        NSError *setCategoryError = nil;
-        [session setCategory:AVAudioSessionCategoryPlayAndRecord error:&setCategoryError];
-        if(setCategoryError){
-            NSLog(@"%@", [setCategoryError description]);
+        NSError *sessionError;
+        [session setCategory:AVAudioSessionCategoryPlayAndRecord error:&sessionError];
+        if(session == nil) {
+            NSLog(@"Error creating session: %@", [sessionError description]);
+        } else {
+            [session setActive:YES error:nil];
         }
         
         _recorder = [[AVAudioRecorder alloc] initWithURL:wavUrl settings:self.recordSetting error:&error];
-        _recorder.meteringEnabled = YES;
         if (!_recorder || error) {
             _recorder = nil;
             if (completion) {
@@ -130,7 +131,6 @@
     return [path stringByAppendingPathComponent:[NSString stringWithFormat:@"%@%@",fileName,kRecoderType]];
 }
 
-
 - (void)cancelCurrentRecording {
     _recorder.delegate = nil;
     if (_recorder.recording) {
@@ -155,9 +155,7 @@
     }
 }
 
-
 #pragma mark - Getter
-
 - (NSDictionary *)recordSetting {
     if (!_recordSetting) {
         _recordSetting = [[NSDictionary alloc] initWithObjectsAndKeys:

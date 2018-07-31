@@ -39,15 +39,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    
     [self.view addSubview:self.chatBox];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardFrameWillChange:) name:UIKeyboardWillChangeFrameNotification object:nil];
 }
 
 #pragma mark - Public Methods
-
 - (BOOL)resignFirstResponder {
     if (self.chatBox.status == ADChatBoxStatusShowVideo) { // 录制视频状态
         if (_delegate && [_delegate respondsToSelector:@selector(chatBoxViewController:didChangeChatBoxHeight:)]) {
@@ -189,11 +186,9 @@
     return _imagePicker;
 }
 
-#pragma mark - TLChatBoxMoreViewDelegate
-
-- (void) chatBoxMoreView:(ADChatBoxMoreView *)chatBoxMoreView
-           didSelectItem:(ADChatBoxItem)itemType
-{
+#pragma mark - ADChatBoxMoreViewDelegate
+- (void)chatBoxMoreView:(ADChatBoxMoreView *)chatBoxMoreView
+           didSelectItem:(ADChatBoxItem)itemType {
     if (itemType == ADChatBoxItemAlbum) {       // 相册
         if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
             self.imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
@@ -335,8 +330,7 @@
 }
 
 
-- (void)chatBox:(ADChatBox *)chatBox sendTextMessage:(NSString *)textMessage
-{
+- (void)chatBox:(ADChatBox *)chatBox sendTextMessage:(NSString *)textMessage {
     if (_delegate && [_delegate respondsToSelector:@selector(chatBoxViewController:sendTextMessage:)]) {
         [_delegate chatBoxViewController:self sendTextMessage:textMessage];
     }
@@ -348,8 +342,7 @@
  *  @param chatBox chatBox
  *  @param height  height
  */
-- (void)chatBox:(ADChatBox *)chatBox changeChatBoxHeight:(CGFloat)height
-{
+- (void)chatBox:(ADChatBox *)chatBox changeChatBoxHeight:(CGFloat)height {
     self.chatBoxFaceView.y = height;
     self.chatBoxMoreView.y = height;
     if (_delegate && [_delegate respondsToSelector:@selector(chatBoxViewController:didChangeChatBoxHeight:)]) {
@@ -359,15 +352,10 @@
     
 }
 
-- (void)chatBoxDidStartRecordingVoice:(ADChatBox *)chatBox
-{
+- (void)chatBoxDidStartRecordingVoice:(ADChatBox *)chatBox {
     self.recordName = [self currentRecordFileName];
-    //    if ([_delegate respondsToSelector:@selector(voiceDidStartRecording)]) {
-    //        [_delegate voiceDidStartRecording];
-    //    }
     [[ADRecordManager shareManager] startRecordingWithFileName:self.recordName completion:^(NSError *error) {
-        if (error) {   // 加了录音权限的判断
-        } else {
+        if (!error) {
             if ([_delegate respondsToSelector:@selector(voiceDidStartRecording)]) {
                 [_delegate voiceDidStartRecording];
             }

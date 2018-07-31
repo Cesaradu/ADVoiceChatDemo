@@ -166,7 +166,7 @@
 }
 
 #pragma mark - ADChatBoxViewControllerDelegate
-- (void) chatBoxViewController:(ADChatBoxViewController *)chatboxViewController
+- (void)chatBoxViewController:(ADChatBoxViewController *)chatboxViewController
         didChangeChatBoxHeight:(CGFloat)height {
     self.chatBoxVC.view.top = self.view.bottom - height;
     self.tableView.height = ScreenHeight - height - HEIGHT_NAVBAR;
@@ -354,6 +354,7 @@
 - (void)voiceDidCancelRecording {
     [self timerInvalue];
     self.voiceHud.hidden = YES;
+    self.voiceHud.image = nil;
 }
 
 - (void)voiceDidStartRecording {
@@ -366,7 +367,7 @@
 - (void)voiceWillDragout:(BOOL)inside {
     if (inside) {
         [_timer setFireDate:[NSDate distantPast]];
-        _voiceHud.image  = [UIImage imageNamed:@"voice_1"];
+        self.voiceHud.image  = [UIImage imageNamed:@"voice_1"];
     } else {
         [_timer setFireDate:[NSDate distantFuture]];
         self.voiceHud.animationImages  = nil;

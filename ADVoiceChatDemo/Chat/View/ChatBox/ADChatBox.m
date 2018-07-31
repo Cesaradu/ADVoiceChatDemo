@@ -122,27 +122,21 @@
 
 #pragma mark - UITextViewDelegate
 - (void)textViewDidBeginEditing:(UITextView *)textView {
-    //    ICChatBoxStatus lastStatus = self.status;
     self.status = ADChatBoxStatusShowKeyboard;
 }
 
 - (void)textViewDidChange:(UITextView *)textView {
-    //    CGFloat height = [textView sizeThatFits:CGSizeMake(self.textView.width, MAXFLOAT)].height;
-    if (textView.text.length > 5000) { // 限制5000字内
+    if (textView.text.length > 5000) {
         textView.text = [textView.text substringToIndex:5000];
     }
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
     if ([text isEqualToString:@"\n"]) {
-        if (self.textView.text.length > 0) {     // send Text
-            //            if ([self.textView.text isTrimmingSpace]) {
-            ////                [MBProgressHUD showError:@"不能发送空白消息"];
-            //            } else {
+        if (self.textView.text.length > 0) {
             if (_delegate && [_delegate respondsToSelector:@selector(chatBox:sendTextMessage:)]) {
                 [_delegate chatBox:self sendTextMessage:self.textView.text];
             }
-            //            }
         }
         [self.textView setText:@""];
         return NO;
