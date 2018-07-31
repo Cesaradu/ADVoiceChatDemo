@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "ChatListViewController.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +18,13 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    self.window = [[UIWindow alloc] init];
+    self.window.frame = [UIScreen mainScreen].bounds;
+    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:[[ChatListViewController alloc] init]];
+    self.window.rootViewController = navi;
+    [self.window makeKeyAndVisible];
+    
     return YES;
 }
 

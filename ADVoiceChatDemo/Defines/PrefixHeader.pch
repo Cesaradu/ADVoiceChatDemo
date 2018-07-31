@@ -1,0 +1,36 @@
+//
+//  PrefixHeader.pch
+//  ADVoiceChatDemo
+//
+//  Created by Adu on 2018/7/10.
+//  Copyright © 2018年 Adu. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+
+#import "Define.h"
+#import "Masonry.h"
+#import "SDVersion.h"
+#import "UIColor+ColorHelper.h"
+#import "NSString+Extension.h"
+#import "UIButton+Extension.h"
+#import "UILabel+Extension.h"
+#import "UIImage+Extension.h"
+#import "MBProgressHUD+Help.h"
+#import "UIView+Frame.h"
+#import "YYKit.h"
+#import "MJExtension.h"
+#import "NSDictionary+Helper.h"
+#import "FMDB.h"
+
+#import "VoiceConverter.h"
+#import "ADChatServerDefines.h"
+
+#endif /* PrefixHeader_pch */
